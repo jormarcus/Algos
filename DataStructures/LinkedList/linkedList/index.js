@@ -31,10 +31,11 @@ class LinkedList {
   }
 
   getLast() {
+    let node = this.head;
+
     if (!this.head) {
       return null;
     }
-    let node = this.head;
 
     while (node.next) {
       node = node.next;
@@ -48,40 +49,47 @@ class LinkedList {
   }
 
   removeFirst() {
-    if (!this.head) {
-      return;
+    if (this.head) {
+      this.head = this.head.next;
     }
-
-    this.head = this.head.next;
   }
 
   removeLast() {
+    let node = this.head;
+    let previous = this.head;
+
+    // check if no nodes
     if (!this.head) {
       return;
     }
+    // check if only one node
     else if (!this.head.next) {
       this.head = null;
       return;
     }
 
-    let node = this.head;
-
-    while (node.next.next) {
+    // loop through nodes and assign previous to current and current node to next
+    while (node.next) {
+      previous = node;
       node = node.next;
     }
 
-    node.next = null;
+    previous.next = null;
   }
 
   getAt(n) {
-    let node = this.head;
     let counter = 0;
+    let node = this.head;
+
+    if (n < 0) {
+      return null;
+    }
 
     while (node) {
       if (counter === n) {
         return node;
       }
-      counter++
+      counter++;
       node = node.next;
     }
 
@@ -89,15 +97,17 @@ class LinkedList {
   }
 
   removeAt(n) {
-    let previous;
-    let node = this.head;
     let counter = 0;
+    let node = this.head;
+    let previous;
 
     if (!this.head) {
       return;
     }
 
-    if (n === 0) {
+    if (n < 0) {
+      return;
+    } else if (n === 0) {
       this.head = this.head.next;
       return;
     }
@@ -116,27 +126,27 @@ class LinkedList {
   }
 
   insertAt(n, data) {
-    let previous;
-    let counter = 1;
-    let node = this.head;
-    let newNode;
-
     if (n === 0) {
-      newNode = new Node(data, this.head.next);
-      this.head = newNode;
+      this.head = new Node(data, this.head);
       return;
     }
 
+    let counter = 0;
+    let node = this.head;
+    let previous;
+
     while (node) {
       if (counter === n) {
-        newNode = new Node(data, node);
-        previous.next = newNode;
+        previous.next = new Node(data, node);
         return;
       }
       counter++;
       previous = node;
       node = node.next;
     }
+
     return;
   }
 }
+
+module.exports = { Node, LinkedList };
